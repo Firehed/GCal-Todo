@@ -34,12 +34,8 @@ if (!isset($_SESSION['token'])) {
 </style>
 <form method="post" action="?">
 	<label>Title: <input type="text" name="title" required autofocus /></label><br />
-	<input type="hidden" name="tz"   id="tz" />
 	<button type="submit">Create Event</button>
 </form>
-<script>
-document.getElementById('tz').value = (new Date().getTimezoneOffset()/-60);
-</script>
 </body>
 </html>
 <?
