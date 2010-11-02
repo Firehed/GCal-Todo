@@ -1,4 +1,5 @@
 <?
+session_set_cookie_params(60*60*24*365.25);// 1 year
 session_start();
 error_reporting(0);
 ini_set('display_errors',0);
