@@ -16,30 +16,11 @@ function getAuthSubUrl() {
 	$session = true;
 	return Zend_Gdata_AuthSub::getAuthSubTokenUri($next, $scope, $secure, $session);
 }
-
 if (!isset($_SESSION['token'])) {
 	if (isset($_GET['token'])) $_SESSION['token'] = Zend_Gdata_AuthSub::getAuthSubSessionToken($_GET['token']);
 	else header('Location: ' . getAuthSubUrl());
 }
-
-?>
-<!doctype HTML>
-<html>
-<head>
-	<meta name="viewport" content="width=320" />
-</head>
-<body>
-<style>
-:required { background: yellow; }
-:invalid { background: red; }
-</style>
-<form method="post" action="?">
-	<label>Title: <input type="text" name="title" required autofocus /></label><br />
-	<button type="submit">Create Event</button>
-</form>
-</body>
-</html>
-<?
+$note = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$client = Zend_Gdata_AuthSub::getHttpClient($_SESSION['token']);
 	$gdataCal = new Zend_Gdata_Calendar($client);
@@ -57,6 +38,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$when->endTime = date('c', strtotime($when->startTime) + 60); // 60 seconds long
 	}
 	$newEvent->save();
-	echo 'Reminder created!';
+	$note = 'Reminder created!';
 }
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GCal-Todo!</title>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+	<style>body{background:white;color:black;line-height:1;margin:0;padding:0;}textarea,button,p{display:block;margin: 10px auto 0;}textarea{border:1px solid #000;height:120px;width:90%;}button{background:#90EE90;border:2px outset #060;color:#040;font-size:1.4em;padding:5px;}</style>
+</head>
+<body>
+	<?=$note?>
+	<form method="post" action="?">
+		<textarea name="title" required autofocus placeholder="Event info"></textarea>
+		<button type="submit">Create Event</button>
+	</form>
+</body>
+</html>
 
